@@ -15,10 +15,9 @@ FROM customers
 WHERE city = 'Lihue';
 
 -- Q3) Return the first 5 orders by earliest order_datetime (order_id, order_datetime).
-SELECT order_id, order_datetime
+SELECT TOP 5 order_id, order_datetime
 FROM orders
-ORDER BY order_datetime ASC
-LIMIT 5;
+ORDER BY order_datetime ASC;
 
 -- Q4) Find all products with the word 'Latte' in the name.
 SELECT *
@@ -50,10 +49,9 @@ FROM orders
 WHERE DATE(order_datetime) = '2025-09-04';
 
 -- Q9) Return the top 3 most expensive products (price, name).
-SELECT price, name
+SELECT TOP 3 price, name
 FROM products
-ORDER BY price DESC
-LIMIT 3;
+ORDER BY price DESC;
 
 -- Q10) Show customer full names as a single column 'customer_name'
 --      in the format "Last, First".

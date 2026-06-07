@@ -14,12 +14,32 @@ GROUP BY order_id;
 
 -- Q2) Compute total items per order for PAID orders only.
 --     Return (order_id, total_items). Hint: order_id IN (SELECT ... FROM orders WHERE status='paid').
-
+SELECT 
+    order_id,
+    SUM(quantity) AS total_items
+FROM order_items
+WHERE order_id IN (
+    SELECT order_id 
+    FROM orders 
+    WHERE status = 'paid'
+)
+GROUP BY order_id;
 -- Q3) How many orders were placed per day (all statuses)?
 --     Return (order_date, orders_count) from orders.
+SELECT 
+    DATE(order_datetime) AS order_date,
+    COUNT(*) AS orders_count
+FROM orders
+GROUP BY DATE(order_datetime);
 
 -- Q4) What is the average number of items per PAID order?
 --     Use a subquery or CTE over order_items filtered by order_id IN (...).
+SELECT 
+    product_id,
+    SUM(quantity) AS total_units
+FROM order_items
+GROUP BY product_id
+ORDER BY total_units DESC;
 
 -- Q5) Which products (by product_id) have sold the most units overall across all stores?
 --     Return (product_id, total_units), sorted desc.
@@ -30,6 +50,12 @@ GROUP BY order_id;
 
 -- Q7) For each store, how many UNIQUE customers have placed a PAID order?
 --     Return (store_id, unique_customers) using only the orders table.
+SELECT 
+    store_id,
+    COUNT(DISTINCT customer_id) AS unique_customers
+FROM orders
+WHERE status = 'paid'
+GROUP BY store_id;
 
 -- Q8) Which day of week has the highest number of PAID orders?
 --     Return (day_name, orders_count). Hint: DAYNAME(order_datetime). Return ties if any.
@@ -44,6 +70,10 @@ GROUP BY order_id;
 
 -- Q11) Among PAID orders, what percent used 'app' as the payment_method?
 --      Return a single row with pct_app_paid_orders (0–100).
+SELECT 
+    100 * SUM(payment_method = 'app') / COUNT(*) AS pct_app_paid_orders
+FROM orders
+WHERE status = 'paid';
 
 -- Q12) Busiest hour: for PAID orders, show (hour_of_day, orders_count) sorted desc.
 

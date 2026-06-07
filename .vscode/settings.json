@@ -1,0 +1,20 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "xprotocol",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 33060,
+            "driver": "MySQL",
+            "name": "CodeYou Connection",
+            "database": "coffeeshop_db",
+            "username": "root",
+            "password": "Stef1J@cob1!",
+            "connectionTimeout": 60
+        }
+    ]
+}

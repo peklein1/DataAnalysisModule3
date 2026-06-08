@@ -7,20 +7,64 @@ USE coffeeshop_db;
 -- Q1) Scalar subquery (AVG benchmark):
 --     List products priced above the overall average product price.
 --     Return product_id, name, price.
+SELECT product_id, name, price
+FROM products
+WHERE price > (
+    SELECT AVG(price)
+    FROM products
+);
 
 -- Q2) Scalar subquery (MAX within category):
 --     Find the most expensive product(s) in the 'Beans' category.
 --     (Return all ties if more than one product shares the max price.)
 --     Return product_id, name, price.
+SELECT product_id, name, price
+FROM products
+WHERE category_id = (
+    SELECT category_id
+    FROM categories
+    WHERE category_name = 'Beans'
+)
+AND price = (
+    SELECT MAX(price)
+    FROM products
+    WHERE category_id = (
+        SELECT category_id
+        FROM categories
+        WHERE category_name = 'Beans'
+    )
+);
 
 -- Q3) List subquery (IN with nested lookup):
 --     List customers who have purchased at least one product in the 'Merch' category.
 --     Return customer_id, first_name, last_name.
 --     Hint: Use a subquery to find the category_id for 'Merch', then a subquery to find product_ids.
+SELECT customer_id, first_name, last_name
+FROM customers
+WHERE customer_id IN (
+    SELECT o.customer_id
+    FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE oi.product_id IN (
+        SELECT product_id
+        FROM products
+        WHERE category_id = (
+            SELECT category_id
+            FROM categories
+            WHERE category_name = 'Merch'
+        )
+    )
+);
 
 -- Q4) List subquery (NOT IN / anti-join logic):
 --     List products that have never been ordered (their product_id never appears in order_items).
 --     Return product_id, name, price.
+SELECT product_id, name, price
+FROM products
+WHERE product_id NOT IN (
+    SELECT product_id
+    FROM order_items
+);
 
 -- Q5) Table subquery (derived table + compare to overall average):
 --     Build a derived table that computes total_units_sold per product

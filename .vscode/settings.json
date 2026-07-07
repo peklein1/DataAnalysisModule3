@@ -16,5 +16,6 @@
             "password": "Stef1J@cob1!",
             "connectionTimeout": 60
         }
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }
